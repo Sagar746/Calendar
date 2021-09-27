@@ -2,14 +2,11 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-
 from .models import Calendar,Participant,Event
 from .serializers import(CalendarSerializer,
 						ParticipantSerializer,
 						EventSerializer
 )
-
-# Create your views here.
 
 
 class CalendarViewSet(ModelViewSet):
@@ -24,3 +21,5 @@ class ParticipantViewSet(ModelViewSet):
 class EventViewSet(ModelViewSet):
 	queryset=Event.objects.all()
 	serializer_class=EventSerializer
+
+	search_fields = ['title']
