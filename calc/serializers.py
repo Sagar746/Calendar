@@ -1,26 +1,12 @@
 from rest_framework import serializers
-from .models import Calendar,Participant,Event
+from .models import Calendar,Event
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 
-class ParticipantSerializer(serializers.ModelSerializer):
-	class Meta:
-		model=Participant
-		fields=['id','email']
-
 class EventSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-	participants = ParticipantSerializer(many=True)
 
 	class Meta:
 		model=Event
-		fields=['id','title','description','start_date','end_date','color', 'calendar', 'participants']
-
-	def create(self,validated_data):
-		participants=validated_data.pop('participants')
-		event=Event.objects.create(**validated_data)
-		for participant in participants:
-			Participant.objects.create(event=event,**participant)
-		return event
-
+		fields=['id','title','description','start','end','color', 'calendar', 'participants']
 
 class CalendarSerializer(WritableNestedModelSerializer,serializers.ModelSerializer):
 	events=EventSerializer(many=True)
